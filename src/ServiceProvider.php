@@ -57,7 +57,7 @@ class ServiceProvider extends AbstractServiceProvider
     private function getCommandClassList()
     {
         $classes = [];
-        foreach (glob(__DIR__'/Console/Commands/*.php') as $file) {
+        foreach (glob(__DIR__.'/Console/Commands/*.php') as $file) {
             require_once $file;
             // get the file name of the current file without the extension
             // which is essentially the class name
