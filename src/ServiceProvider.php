@@ -40,7 +40,7 @@ class ServiceProvider extends AbstractServiceProvider
      * @var array
      */
     protected $consoleClasses = [
-        Zaks\MySQLOptimier\Console\Commands\Command::class,
+        \Zaks\MySQLOptimier\Console\Commands\Command::class,
     ];
 
     /**
