@@ -12,9 +12,16 @@ class Command extends BaseCommand
      *
      * @var string
      */
-    protected $signature = 'database:optimize
+    protected $signature = 'db:optimize
                         {--database=default}
                         {--table=*?}';
+
+    /**
+     * ConversiSelectioSelection query
+     *
+     * @var string
+     */
+    protected $query = 'SELECT TABLE_NAME FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_SCHEMA = ?';
 
     /**
      * The console command name.
@@ -37,7 +44,55 @@ class Command extends BaseCommand
      */
     public function handle()
     {
+        $this->info('Starting Optimization.');
 
+        dd($this->tables())
+            ->tap(function($collection) {
+                $this->progress = $this->output->createProgressBar($collection->count());
+            })->each(function($table){
+                $this->optimize($table);
+            });
+
+        $this->info(PHP_EOL.'Optimization Completed');
     }
 
+    /**
+     * Get database which need optimization
+     *
+     * @return string
+     */
+    protected function getDatabase()
+    {
+        if($database = $this->option('database') == 'default') {
+            $database = env('DB_DATABASE');
+        }
+        return  $database;
+    }
+
+    /**
+     * Get all the tables that need to the optimized
+     *
+     * @return array
+     */
+    private function getTables()
+    {
+        if ($tables = $this->option('table') == '*') {
+            $tables = DB::select($this->query, [$this->getDatabase()]);
+        }
+
+        return collect($tables)->pluck('TABLE_NAME');
+    }
+
+    /**
+     * Optimize the table
+     *
+     * @param  string $table
+     * @return void
+     */
+    protected function optimize($table)
+    {
+        if (DB::statement("OPTIMIZE TABLE `{$table}`")){
+            $this->progress->advance();
+        }
+    }
 }
