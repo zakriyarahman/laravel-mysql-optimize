@@ -46,7 +46,7 @@ class Command extends BaseCommand
     {
         $this->info('Starting Optimization.');
 
-        dd($this->tables())
+        dd($this->getTables())
             ->tap(function($collection) {
                 $this->progress = $this->output->createProgressBar($collection->count());
             })->each(function($table){
