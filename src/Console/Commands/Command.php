@@ -76,11 +76,12 @@ class Command extends BaseCommand
      */
     private function getTables()
     {
-        if ($tables = dd($this->option('table')) == '*') {
-            $tables = dd(DB::select(dd($this->query, [$this->getDatabase()])));
+        $tables = $this->option('table');
+        if (empty($tables)) {
+            $tables = DB::select($this->query, [$this->getDatabase()]);
         }
 
-        return collect(dd($tables))->pluck('TABLE_NAME');
+        return collect($tables)->pluck('TABLE_NAME');
     }
 
     /**
