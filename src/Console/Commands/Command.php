@@ -66,7 +66,7 @@ class Command extends BaseCommand
         if($database == 'default') {
             $database = config('mysql-optimizer.database');
         }
-        return  $database;
+        return dd($database);
     }
 
     /**
