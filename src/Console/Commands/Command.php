@@ -46,14 +46,12 @@ class Command extends BaseCommand
     public function handle()
     {
         $this->info('Starting Optimization.');
-
         dd($this->getTables())
             ->tap(function($collection) {
                 $this->progress = $this->output->createProgressBar($collection->count());
             })->each(function($table){
                 $this->optimize($table);
             });
-
         $this->info(PHP_EOL.'Optimization Completed');
     }
 
@@ -64,8 +62,9 @@ class Command extends BaseCommand
      */
     protected function getDatabase()
     {
-        if($database = $this->option('database') == 'default') {
-            $database = env('DB_DATABASE');
+        $database = $this->option('database');
+        if($database == 'default') {
+            $database = config('mysql-optimizer.database');
         }
         return  $database;
     }
@@ -81,7 +80,6 @@ class Command extends BaseCommand
         if (empty($tables)) {
             $tables = DB::select($this->query, [$this->getDatabase()]);
         }
-
         return collect($tables)->pluck('TABLE_NAME');
     }
 
