@@ -63,8 +63,8 @@ class Command extends BaseCommand
     protected function getDatabase()
     {
         $database = $this->option('database');
-        if(dd($database == 'default')) {
-            $database = config('mysql-optimizer.database');
+        if($database == 'default') {
+            dd($database = config('mysql-optimizer.database'));
         }
         return dd($database);
     }
