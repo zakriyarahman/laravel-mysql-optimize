@@ -4,6 +4,7 @@ namespace Zaks\MySQLOptimier\Console\Commands;
 
 use Illuminate\Console\Command as BaseCommand;
 use Illuminate\Support\Facades\DB;
+use Symfony\Component\Console\Output\OutputInterface;
 
 class Command extends BaseCommand
 {
@@ -49,7 +50,10 @@ class Command extends BaseCommand
         $this->getTables()
             ->tap(function($collection) {
                 $this->progress = $this->output->createProgressBar($collection->count());
-            })->each(function($table){
+            })->each(function($table) {
+                if (OutputInterface::VERBOSITY_VERY_VERBOSE) {
+                    $this->info('Optimizing table' . $table);
+                }
                 $this->optimize($table);
             });
         $this->info(PHP_EOL.'Optimization Completed');
@@ -91,8 +95,9 @@ class Command extends BaseCommand
      */
     protected function optimize($table)
     {
-        if (DB::statement("OPTIMIZE TABLE `{$table}`")){
+        if (DB::statement("OPTIMIZE TABLE `{$table}`")) {
             $this->progress->advance();
+            $this->output->writeln('');
         }
     }
 }
