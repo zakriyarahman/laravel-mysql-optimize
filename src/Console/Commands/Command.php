@@ -3,6 +3,7 @@
 namespace Zaks\MySQLOptimier\Console\Commands;
 
 use Illuminate\Console\Command as BaseCommand;
+use Illuminate\Support\Facades\DB;
 
 class Command extends BaseCommand
 {
