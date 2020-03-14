@@ -46,7 +46,7 @@ class Command extends BaseCommand
     public function handle()
     {
         $this->info('Starting Optimization.');
-        dd($this->getTables())
+        $this->getTables()
             ->tap(function($collection) {
                 $this->progress = $this->output->createProgressBar($collection->count());
             })->each(function($table){
@@ -64,9 +64,9 @@ class Command extends BaseCommand
     {
         $database = $this->option('database');
         if($database == 'default') {
-            dd($database = config('mysql-optimizer.database'));
+            $database = config('mysql-optimizer.database');
         }
-        return dd($database);
+        return $database;
     }
 
     /**
