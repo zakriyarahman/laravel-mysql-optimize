@@ -35,6 +35,15 @@ class ServiceProvider extends AbstractServiceProvider
     protected $config = 'mysql-optimizer';
 
     /**
+     * Console command classes
+     *
+     * @var array
+     */
+    protected $consoleClasses = [
+        Zaks\MySQLOptimier\Console\Commands\Command::class,
+    ];
+
+    /**
      * Register services.
      *
      * @return void
@@ -56,18 +65,7 @@ class ServiceProvider extends AbstractServiceProvider
      */
     private function getCommandClassList()
     {
-        $classes = [];
-        foreach (glob(__DIR__.'/Console/Commands/*.php') as $file) {
-            require_once $file;
-            // get the file name of the current file without the extension
-            // which is essentially the class name
-            $class = basename($file, '.php');
-
-            if (class_exists($class)) {
-                $classes[] = $class;
-            }
-        }
-        return $classes;
+        return $this->consoleClasses;
     }
 
     /**
