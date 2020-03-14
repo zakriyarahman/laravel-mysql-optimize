@@ -14,7 +14,7 @@ class Command extends BaseCommand
      */
     protected $signature = 'db:optimize
                         {--database=default}
-                        {--table=*?}';
+                        {--table=*}';
 
     /**
      * ConversiSelectioSelection query
