@@ -50,10 +50,8 @@ class Command extends BaseCommand
         $this->getTables()
             ->tap(function($collection) {
                 $this->progress = $this->output->createProgressBar($collection->count());
-            })->each(function($table) {
-                if (OutputInterface::VERBOSITY_VERY_VERBOSE) {
-                    $this->info('Optimizing table' . $table);
-                }
+            })
+            ->each(function($table) {
                 $this->optimize($table);
             });
         $this->info(PHP_EOL.'Optimization Completed');
@@ -97,7 +95,6 @@ class Command extends BaseCommand
     {
         if (DB::statement("OPTIMIZE TABLE `{$table}`")) {
             $this->progress->advance();
-            $this->output->writeln('');
         }
     }
 }
