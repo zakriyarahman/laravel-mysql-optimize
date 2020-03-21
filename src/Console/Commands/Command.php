@@ -4,7 +4,7 @@ namespace Zaks\MySQLOptimier\Console\Commands;
 
 use Illuminate\Console\Command as BaseCommand;
 use Illuminate\Support\Facades\DB;
-use Symfony\Component\Console\Output\OutputInterface;
+use Illuminate\Support\Collection;
 
 class Command extends BaseCommand
 {
@@ -23,7 +23,7 @@ class Command extends BaseCommand
      *
      * @var string
      */
-    protected $query = 'SELECT TABLE_NAME FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_SCHEMA = ?';
+    protected string $query = 'SELECT TABLE_NAME FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_SCHEMA = ?';
 
     /**
      * The console command name.
@@ -44,7 +44,7 @@ class Command extends BaseCommand
      *
      * @return void
      */
-    public function handle()
+    public function handle(): void
     {
         $this->info('Starting Optimization.');
         $this->getTables()
@@ -62,7 +62,7 @@ class Command extends BaseCommand
      *
      * @return string
      */
-    protected function getDatabase()
+    protected function getDatabase(): string
     {
         $database = $this->option('database');
         if($database == 'default') {
@@ -74,9 +74,9 @@ class Command extends BaseCommand
     /**
      * Get all the tables that need to the optimized
      *
-     * @return array
+     * @return Collection
      */
-    private function getTables()
+    private function getTables(): Collection
     {
         $tables = $this->option('table');
         if (empty($tables)) {
@@ -91,7 +91,7 @@ class Command extends BaseCommand
      * @param  string $table
      * @return void
      */
-    protected function optimize($table)
+    protected function optimize(string $table): void
     {
         if (DB::statement("OPTIMIZE TABLE `{$table}`")) {
             $this->progress->advance();

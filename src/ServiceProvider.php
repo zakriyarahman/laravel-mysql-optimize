@@ -2,107 +2,44 @@
 
 namespace Zaks\MySQLOptimier;
 
+use Illuminate\Foundation\Application as LaravelApplication;
 use Illuminate\Support\ServiceProvider as AbstractServiceProvider;
+use Zaks\MySQLOptimier\Console\Commands\Command;
 
 class ServiceProvider extends AbstractServiceProvider
 {
-    /**
-     * The paths that should be published.
-     *
-     * @var array
-     */
-    public static $publishes = [];
-
-    /**
-     * The paths that should be published by group.
-     *
-     * @var array
-     */
-    public static $publishGroups = [];
-
-    /**
-     * Base package path
-     *
-     * @var string
-     */
-    protected $baseDir = __DIR__.'/../';
-
     /**
      * Config Name
      *
      * @var string
      */
-    protected $config = 'mysql-optimizer';
+    protected string $config = 'mysql-optimizer';
 
     /**
-     * Console command classes
-     *
-     * @var array
-     */
-    protected $consoleClasses = [
-        \Zaks\MySQLOptimier\Console\Commands\Command::class,
-    ];
-
-    /**
-     * Register services.
+     * Register the service provider.
      *
      * @return void
      */
-    public function register()
+    public function register(): void
     {
-        // Setup the config
-        $path = $this->baseDir.'config'.'/';
-        $file = $this->config.'.php';
-        $this->mergeConfigFrom($path.$file, $this->config);
-        // Add commands
-        $this->commands($this->getCommandClassList());
+        $this->commands([Command::class]);
     }
 
     /**
-     * Get the list of classes in the command file path
-     *
-     * @return array
-     */
-    private function getCommandClassList()
-    {
-        return $this->consoleClasses;
-    }
-
-    /**
-     * Merge the given configuration with the existing configuration.
-     *
-     * @param  string  $path
-     * @param  string  $key
-     * @return void
-     */
-    protected function mergeConfigFrom($path, $key)
-    {
-        $config = $this->app['config']->get($key, []);
-
-        $this->app['config']->set($key, array_merge(require $path, $config));
-    }
-
-    /**
-     * Bootstrap services.
+     * Boot the service provider.
      *
      * @return void
      */
-    public function boot()
+    public function boot(): void
     {
-        // Publish config
-        $this->publishConfig();
-    }
+        $source = realpath($raw = __DIR__."/../config/{$this->config}.php") ?: $raw;
 
-    /**
-     * Publish Config
-     *
-     * @return Void
-     */
-    protected function publishConfig()
-    {
-        # Publish configs
-        $this->publishes([
-            $this->baseDir . "config/{$this->config}.php" => config_path($this->config),
-        ], 'config');
+        if ($this->app instanceof LaravelApplication && $this->app->runningInConsole()) {
+            $this->publishes([$source => config_path("$this->config.php")]);
+        } elseif ($this->app instanceof LumenApplication) {
+            $this->app->configure($this->config);
+        }
+
+        $this->mergeConfigFrom($source, $this->config);
     }
 }
