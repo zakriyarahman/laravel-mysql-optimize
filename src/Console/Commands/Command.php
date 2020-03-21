@@ -78,11 +78,12 @@ class Command extends BaseCommand
      */
     private function getTables(): Collection
     {
-        $tables = $this->option('table');
+        $tables = (array)$this->option('table');
         if (empty($tables)) {
             $tables = DB::select($this->query, [$this->getDatabase()]);
+            return collect($tables)->pluck('TABLE_NAME');
         }
-        return collect($tables)->pluck('TABLE_NAME');
+        return collect($tables);
     }
 
     /**
