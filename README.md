@@ -10,12 +10,20 @@ Via Composer
 $ composer require zakriyarahman/laravel-mysql-optimize
 ```
 
-### Config
+## Configuration
 
 This package provides default configuration variables. Publish configuration to your repository for custom configuration.
 
 ``` bash
-artisan vendor:publish --provider="Zaks\MySQLOptimier\ServiceProvider" --tag=config
+$ artisan vendor:publish --provider="Zaks\MySQLOptimier\ServiceProvider" --tag=config
+```
+
+## Usage
+
+Optimize the database tables with optional database and tables/s.
+
+``` bash
+$ artisan db:optimize --database={DATABASE} --table={table[]}
 ```
 
 ## Testing
