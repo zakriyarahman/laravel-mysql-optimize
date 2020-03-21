@@ -15,8 +15,8 @@ class Command extends BaseCommand
      * @var string
      */
     protected $signature = 'db:optimize
-                        {--database=default}
-                        {--table=*}';
+                        {--database=default : Default database is set in the config. Database that needs to be optimized.}
+                        {--table=* : Defaulting to all tables in the default database.}';
 
     /**
      * ConversiSelectioSelection query
