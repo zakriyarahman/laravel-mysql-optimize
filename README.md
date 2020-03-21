@@ -13,6 +13,7 @@ $ composer require zakriyarahman/laravel-mysql-optimize
 ## Configuration
 
 This package provides default configuration variables. Publish configuration to your repository for custom configuration.
+The default setting for the database is set to the environmental `DB_DATABASE` variable.
 
 ``` bash
 $ artisan vendor:publish --provider="Zaks\MySQLOptimier\ServiceProvider" --tag=config
@@ -24,6 +25,31 @@ Optimize the database tables with optional database and tables/s.
 
 ``` bash
 $ artisan db:optimize --database={DATABASE} --table={table[]}
+```
+
+### Sample with defaults
+
+Optimizes a default database (which is defined in the configuration of the package) with all the tables in that database.
+Publish the package configuration to the change defualt database settings.
+
+``` bash
+$ artisan db:optimize
+```
+
+### Sample with custom database
+
+Optimizes a custom database separate from the default database configuration.
+
+``` bash
+$ artisan db:optimize --database=database_test
+```
+
+### Sample with custom table arguments
+
+Optimizes a set of tables only.
+
+``` bash
+$ artisan db:optimize --table=table_1 --table=table_2
 ```
 
 ## Testing
