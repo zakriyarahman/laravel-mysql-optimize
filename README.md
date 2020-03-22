@@ -2,6 +2,12 @@
 
 A laravel package that optimizes mysql database tables.
 
+OPTIMIZE TABLE statement is used to reorganize tables and compact any wasted space. The reorganized tables require less disk I/O to perform full table scans.
+
+OPTIMIZE TABLE copies the data part of the table and rebuilds the indexes. The benefits come from improved packing of data within indexes, and reduced fragmentation within the tablespaces and on disk. The benefits vary depending on the data in each table. You may find that there are significant gains for some and not for others, or that the gains decrease over time until you next optimize the table. This operation can be slow if the table is large or if the indexes being rebuilt do not fit into the buffer pool. The first run after adding a lot of data to a table is often much slower than later runs.
+
+For more details, please read the MySQL [website] on optimization techniques. (https://dev.mysql.com/doc/refman/8.0/en/optimization.html)
+
 ## Installation
 
 Via Composer
