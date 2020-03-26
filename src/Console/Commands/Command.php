@@ -3,11 +3,27 @@
 namespace Zaks\MySQLOptimier\Console\Commands;
 
 use Illuminate\Console\Command as BaseCommand;
-use Illuminate\Support\Facades\DB;
+use Illuminate\Database\Query\Builder;
 use Illuminate\Support\Collection;
+use Zaks\MySQLOptimier\Exceptions\DatabaseNotFoundException;
+use Zaks\MySQLOptimier\Exceptions\TableNotFoundException;
+use Exception;
 
 class Command extends BaseCommand
 {
+    /**
+     * The console command description.
+     *
+     * @var string|null
+     */
+    protected $description = 'Optimize table/s of the database';
+
+    /**
+     * The console command name.
+     *
+     * @var string
+     */
+    protected $name = 'Table optimizer for database';
 
     /**
      * The name and signature of the console command.
@@ -19,25 +35,15 @@ class Command extends BaseCommand
                         {--table=* : Defaulting to all tables in the default database.}';
 
     /**
-     * ConversiSelectioSelection query
+     * Construct
      *
-     * @var string
+     * @param Builder $builder
      */
-    protected string $query = 'SELECT TABLE_NAME FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_SCHEMA = ?';
-
-    /**
-     * The console command name.
-     *
-     * @var string
-     */
-    protected $name = 'Table optimizer for database';
-
-    /**
-     * The console command description.
-     *
-     * @var string|null
-     */
-    protected $description = 'Optimize table/s of the database';
+    public function __construct(Builder $builder)
+    {
+        $this->db = $builder;
+        parent::__construct();
+    }
 
     /**
      * Execute the console command.
@@ -51,9 +57,7 @@ class Command extends BaseCommand
             ->tap(function($collection) {
                 $this->progress = $this->output->createProgressBar($collection->count());
             })
-            ->each(function($table) {
-                $this->optimize($table);
-            });
+            ->each(fn($table) => $this->optimize($table));
         $this->info(PHP_EOL.'Optimization Completed');
     }
 
@@ -65,10 +69,30 @@ class Command extends BaseCommand
     protected function getDatabase(): string
     {
         $database = $this->option('database');
-        if($database == 'default') {
-            $database = config('mysql-optimizer.database');
+        if ($database == 'default') {
+            return config('mysql-optimizer.database');
         }
-        return $database;
+        // Check if the database exists
+        if (is_string($database) && $this->existsDatabase($database)) {
+            return $database;
+        }
+        throw new DatabaseNotFoundException("This database {$database} doesn't exists.");
+    }
+
+    /**
+     * Check if the database exists
+     *
+     * @param  string $databaseName
+     * @return bool
+     */
+    private function existsDatabase(string &$databaseName): bool
+    {
+        return $this->db
+                    ->newQuery()
+                    ->selectRaw('SCHEMA_NAME')
+                    ->fromRaw('INFORMATION_SCHEMA.SCHEMATA')
+                    ->whereRaw("SCHEMA_NAME = '{$databaseName}'")
+                    ->count();
     }
 
     /**
@@ -78,12 +102,37 @@ class Command extends BaseCommand
      */
     private function getTables(): Collection
     {
-        $tables = (array)$this->option('table');
-        if (empty($tables)) {
-            $tables = DB::select($this->query, [$this->getDatabase()]);
-            return collect($tables)->pluck('TABLE_NAME');
+        $tableList = collect($this->option('table'));
+        if ($tableList->isEmpty()) {
+            $tableList = $this->db
+                ->newQuery()
+                ->selectRaw('TABLE_NAME')
+                ->fromRaw('INFORMATION_SCHEMA.TABLES')
+                ->whereRaw("TABLE_SCHEMA = '{$this->getDatabase()}'")
+                ->get();
+            return $tableList->pluck('TABLE_NAME');
         }
-        return collect($tables);
+        // Check if the table exists
+        if ($this->existsTables($tableList)) {
+            return $tableList;
+        }
+        throw new TableNotFoundException("One or more tables provided doesn't exists.");
+    }
+
+    /**
+     * Check if the table exists
+     *
+     * @param  Collection $databaseName
+     * @return bool
+     */
+    private function existsTables(Collection $tables): bool
+    {
+        return $this->db
+                    ->newQuery()
+                    ->fromRaw('INFORMATION_SCHEMA.TABLES')
+                    ->whereRaw("TABLE_SCHEMA = '{$this->getDatabase()}'")
+                    ->whereRaw('TABLE_NAME IN (\'' . $tables->implode("','") . '\')')
+                    ->count() == $tables->count();
     }
 
     /**
@@ -94,7 +143,8 @@ class Command extends BaseCommand
      */
     protected function optimize(string $table): void
     {
-        if (DB::statement("OPTIMIZE TABLE `{$table}`")) {
+        $result = $this->db->getConnection()->select("OPTIMIZE TABLE `{$table}`");
+        if (collect($result)->pluck('Msg_text')->contains('OK')) {
             $this->progress->advance();
         }
     }
