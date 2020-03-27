@@ -58,6 +58,16 @@ Optimizes a set of tables only.
 $ artisan db:optimize --table=table_1 --table=table_2
 ```
 
+### Exceptions
+
+An exception is thrown when an argument such as table or database does not exists.
+
+``` php
+Zaks\MySQLOptimier\Exceptions\DatabaseNotFoundException
+Zaks\MySQLOptimier\Exceptions\TableNotFoundException
+```
+
+
 ## Testing
 
 ``` bash
