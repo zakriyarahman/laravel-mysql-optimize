@@ -22,6 +22,13 @@ class ServiceProvider extends AbstractServiceProvider
      */
     public function register(): void
     {
+        $this->app->bind('zpdo', function($app) {
+            $dbaName = config($this->config . '.databaseName');
+            $dbaHost = config($this->config . '.databaseHost');
+            $dbaUsername = config($this->config . '.databaseUsername');
+            $dbaPassword = config($this->config . '.databasePassword');
+            return new ZPDO('mysql:dbname=' . $dbaName . ';host=' . $dbaHost, $dbaUsername, $dbaPassword);
+        });
         $this->commands([Command::class]);
     }
 

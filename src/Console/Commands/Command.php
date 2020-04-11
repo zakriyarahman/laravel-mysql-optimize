@@ -7,6 +7,8 @@ use Illuminate\Database\Query\Builder;
 use Illuminate\Support\Collection;
 use Zaks\MySQLOptimier\Exceptions\DatabaseNotFoundException;
 use Zaks\MySQLOptimier\Exceptions\TableNotFoundException;
+use Zaks\MySQLOptimier\ZPDO;
+use PDO;
 use Exception;
 
 class Command extends BaseCommand
@@ -39,9 +41,9 @@ class Command extends BaseCommand
      *
      * @param Builder $builder
      */
-    public function __construct(Builder $builder)
+    public function __construct()
     {
-        $this->db = $builder;
+        $this->pdo = app('zpdo');
         parent::__construct();
     }
 
@@ -70,7 +72,7 @@ class Command extends BaseCommand
     {
         $database = $this->option('database');
         if ($database == 'default') {
-            return config('mysql-optimizer.database');
+            return config('mysql-optimizer.databaseName');
         }
         // Check if the database exists
         if (is_string($database) && $this->existsDatabase($database)) {
@@ -87,12 +89,12 @@ class Command extends BaseCommand
      */
     private function existsDatabase(string &$databaseName): bool
     {
-        return $this->db
-                    ->newQuery()
-                    ->selectRaw('SCHEMA_NAME')
-                    ->fromRaw('INFORMATION_SCHEMA.SCHEMATA')
-                    ->whereRaw("SCHEMA_NAME = '{$databaseName}'")
-                    ->count();
+        $sql = 'SELECT SCHEMA_NAME FROM INFORMATION_SCHEMA.SCHEMATA WHERE SCHEMA_NAME = :DATABASE';
+        $pdo = app('zpdo');
+        $st = $pdo->prepare($sql);
+        $st->bindValue(':DATABASE', $databaseName);
+        $st->execute();
+        return (bool)$st->rowCount();
     }
 
     /**
