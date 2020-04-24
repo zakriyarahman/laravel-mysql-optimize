@@ -13,7 +13,7 @@ class ServiceProvider extends AbstractServiceProvider
      *
      * @var string
      */
-    protected string $config = 'mysql-optimizer';
+    protected $config = 'mysql-optimizer';
 
     /**
      * Register the service provider.
