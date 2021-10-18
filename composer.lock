@@ -99,16 +99,16 @@
         },
         {
             "name": "illuminate/collections",
-            "version": "v8.62.0",
+            "version": "v8.64.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/illuminate/collections.git",
-                "reference": "18fa841df912ec56849351dd6ca8928e8a98b69d"
+                "reference": "edaf5ea6ffe63dcab1ac86ee9db9c65209f44813"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/illuminate/collections/zipball/18fa841df912ec56849351dd6ca8928e8a98b69d",
-                "reference": "18fa841df912ec56849351dd6ca8928e8a98b69d",
+                "url": "https://api.github.com/repos/illuminate/collections/zipball/edaf5ea6ffe63dcab1ac86ee9db9c65209f44813",
+                "reference": "edaf5ea6ffe63dcab1ac86ee9db9c65209f44813",
                 "shasum": ""
             },
             "require": {
@@ -145,20 +145,20 @@
             ],
             "description": "The Illuminate Collections package.",
             "homepage": "https://laravel.com",
-            "time": "2021-09-08T12:48:16+00:00"
+            "time": "2021-10-11T20:11:16+00:00"
         },
         {
             "name": "illuminate/console",
-            "version": "v8.62.0",
+            "version": "v8.64.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/illuminate/console.git",
-                "reference": "417c16e14c4778fdb770d528f5e6396a5e6157ad"
+                "reference": "c1bfcf8cde25f35b636ae5bd7df4502e8179e273"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/illuminate/console/zipball/417c16e14c4778fdb770d528f5e6396a5e6157ad",
-                "reference": "417c16e14c4778fdb770d528f5e6396a5e6157ad",
+                "url": "https://api.github.com/repos/illuminate/console/zipball/c1bfcf8cde25f35b636ae5bd7df4502e8179e273",
+                "reference": "c1bfcf8cde25f35b636ae5bd7df4502e8179e273",
                 "shasum": ""
             },
             "require": {
@@ -201,7 +201,7 @@
             ],
             "description": "The Illuminate Console package.",
             "homepage": "https://laravel.com",
-            "time": "2021-09-15T14:32:50+00:00"
+            "time": "2021-10-05T18:59:34+00:00"
         },
         {
             "name": "illuminate/container",
@@ -252,7 +252,7 @@
         },
         {
             "name": "illuminate/contracts",
-            "version": "v8.62.0",
+            "version": "v8.64.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/illuminate/contracts.git",
@@ -360,7 +360,7 @@
         },
         {
             "name": "illuminate/macroable",
-            "version": "v8.62.0",
+            "version": "v8.64.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/illuminate/macroable.git",
@@ -402,16 +402,16 @@
         },
         {
             "name": "illuminate/support",
-            "version": "v8.62.0",
+            "version": "v8.64.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/illuminate/support.git",
-                "reference": "3c5fe0dc1bf1ffae91356492e674de9a4fe33c4c"
+                "reference": "5346222c24bbc0da88af032053328dbebd1ab2d8"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/illuminate/support/zipball/3c5fe0dc1bf1ffae91356492e674de9a4fe33c4c",
-                "reference": "3c5fe0dc1bf1ffae91356492e674de9a4fe33c4c",
+                "url": "https://api.github.com/repos/illuminate/support/zipball/5346222c24bbc0da88af032053328dbebd1ab2d8",
+                "reference": "5346222c24bbc0da88af032053328dbebd1ab2d8",
                 "shasum": ""
             },
             "require": {
@@ -462,7 +462,7 @@
             ],
             "description": "The Illuminate Support package.",
             "homepage": "https://laravel.com",
-            "time": "2021-09-27T14:57:59+00:00"
+            "time": "2021-10-06T13:04:48+00:00"
         },
         {
             "name": "nesbot/carbon",
