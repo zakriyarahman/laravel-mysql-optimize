@@ -201,7 +201,7 @@
         },
         {
             "name": "illuminate/container",
-            "version": "v8.83.17",
+            "version": "v8.83.18",
             "source": {
                 "type": "git",
                 "url": "https://github.com/illuminate/container.git",
@@ -292,16 +292,16 @@
         },
         {
             "name": "illuminate/database",
-            "version": "v8.83.17",
+            "version": "v8.83.18",
             "source": {
                 "type": "git",
                 "url": "https://github.com/illuminate/database.git",
-                "reference": "4c189947b4f1f34468e1d083d20ace570bc8bbea"
+                "reference": "8fe2c7114b1ee6a03e7cef9ce6f3675f991044e0"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/illuminate/database/zipball/4c189947b4f1f34468e1d083d20ace570bc8bbea",
-                "reference": "4c189947b4f1f34468e1d083d20ace570bc8bbea",
+                "url": "https://api.github.com/repos/illuminate/database/zipball/8fe2c7114b1ee6a03e7cef9ce6f3675f991044e0",
+                "reference": "8fe2c7114b1ee6a03e7cef9ce6f3675f991044e0",
                 "shasum": ""
             },
             "require": {
@@ -352,7 +352,7 @@
                 "orm",
                 "sql"
             ],
-            "time": "2022-06-13T18:31:18+00:00"
+            "time": "2022-06-27T13:26:25+00:00"
         },
         {
             "name": "illuminate/macroable",
